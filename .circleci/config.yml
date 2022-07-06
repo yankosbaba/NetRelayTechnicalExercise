@@ -20,6 +20,11 @@ jobs:
       - run:
           name: "Build" 
           command: dotnet build -c release
+          working_directory: NetRelayTechnical
+      - run:
+          name: Running Tests
+          command: dotnet test
+
 
 # Invoke jobs via workflows
 # See: https://circleci.com/docs/2.0/configuration-reference/#workflows
