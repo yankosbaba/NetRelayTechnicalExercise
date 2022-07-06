@@ -11,13 +11,13 @@ jobs:
   api-tests:
     executor:
       name: win/default
-    working_directory: C:\Users\circleci\project\NetRelayTechnical
     steps:
-      - checkout:
-          path: C:\Users\circleci\project
+      - checkout
       - run:
           name: "Install project dependencies"
           command: dotnet.exe restore
+          working_directory: NetRelayTechnical
+
       - run:
          name: "Running tests"
          command: dotnet test --no-build --logger "trx"
