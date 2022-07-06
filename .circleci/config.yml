@@ -1,0 +1,39 @@
+version: 2.1
+
+orbs:
+  win: circleci/windows@2.4.0
+
+workflows:
+  integration-tests:
+    jobs:
+      - api-tests
+jobs:  
+  api-tests:
+    executor:
+      name: win/default
+    steps:
+      - checkout
+      - run:
+          name: "Install project dependencies"
+          command: dotnet.exe restore
+          working_directory: NetRelayTechnical
+
+      - run:
+         name: "Running tests"
+         command: dotnet test --logger "trx"
+         working_directory: NetRelayTechnical
+         
+      - run:
+          name: test results
+          when: always
+          command: |
+              dotnet tool install -g trx2junit
+              # export PATH="$PATH:/root/.dotnet/tools"
+              trx2junit NetRelayTechnical\TestResults\*.trx
+      - store_test_results:
+          path: NetRelayTechnical\TestResults
+      - store_artifacts:
+          path: NetRelayTechnical\TestResults
+          destination: circleci-docs
+         
+  
