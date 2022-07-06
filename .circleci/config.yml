@@ -18,8 +18,11 @@ jobs:
       - run:
           name: "Install project dependencies"
           command: dotnet.exe restore
-
-      - run: dotnet test --no-build --logger "trx"
+      - run:
+         name: "Running tests"
+         command: dotnet test --no-build --logger "trx"
+         working_directory: NetRelayTechnical
+         
       - run:
           name: test results
           when: always
