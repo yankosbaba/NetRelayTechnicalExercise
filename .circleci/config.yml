@@ -20,7 +20,7 @@ jobs:
 
       - run:
          name: "Running tests"
-         command: dotnet test --no-build --logger "trx"
+         command: dotnet test --logger "trx"
          working_directory: NetRelayTechnical
          
       - run:
@@ -29,7 +29,7 @@ jobs:
           command: |
               dotnet tool install -g trx2junit
               # export PATH="$PATH:/root/.dotnet/tools"
-              trx2junit **/NetRelayTechnical/*.trx
+              trx2junit NetRelayTechnical/*.trx
       - store_test_results:
           #path: tests/TestResults
          path: NetRelayTechnical
