@@ -4,33 +4,30 @@ orbs:
   win: circleci/windows@2.4.0
 
 workflows:
-  hello-world:
-    jobs:
-      - build
   integration-tests:
     jobs:
       - api-tests
 jobs:
-  build:
-    executor:
-      name: win/default
-    working_directory: C:\Users\circleci\project\NetRelayTechnical
-    steps:
-      - checkout:
-          path: C:\Users\circleci\project
-      - restore_cache:
-          keys:
-            - dotnet-packages-v1-{{ checksum "NetRelayTechnical.csproj" }}
-      - run:
-          name: "Install project dependencies"
-          command: dotnet.exe restore
-      - save_cache:
-          paths:
-            - C:\Users\circleci\project\NetRelayTechnical\.nuget\packages
-          key: dotnet-packages-v1-{{ checksum "NetRelayTechnical.csproj" }}
-      - run:
-          name: "Run Build step"
-          command: dotnet.exe publish -c Release -r win10-x64
+  # build:
+  #   executor:
+  #     name: win/default
+  #   working_directory: C:\Users\circleci\project\NetRelayTechnical
+  #   steps:
+  #     - checkout:
+  #         path: C:\Users\circleci\project
+  #     - restore_cache:
+  #         keys:
+  #           - dotnet-packages-v1-{{ checksum "NetRelayTechnical.csproj" }}
+  #     - run:
+  #         name: "Install project dependencies"
+  #         command: dotnet.exe restore
+  #     - save_cache:
+  #         paths:
+  #           - C:\Users\circleci\project\NetRelayTechnical\.nuget\packages
+  #         key: dotnet-packages-v1-{{ checksum "NetRelayTechnical.csproj" }}
+  #     - run:
+  #         name: "Run Build step"
+  #         command: dotnet.exe publish -c Release -r win10-x64
   api-tests:
     executor:
       name: win/default
@@ -40,5 +37,5 @@ jobs:
           name: Run api tests
           command: dotnet test
       - store_test_results:
-          path: test-results
+          path: NetRelayTechnical
   
