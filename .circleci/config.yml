@@ -15,8 +15,11 @@ jobs:
     steps:
       - checkout
       - run:
-          name: "Say hello"
-          command: "echo Hello, World!"
+          name: "Restore"
+          command: dotnet restore
+      - run:
+          name: "Build" 
+          command: dotnet build -c release
 
 # Invoke jobs via workflows
 # See: https://circleci.com/docs/2.0/configuration-reference/#workflows
