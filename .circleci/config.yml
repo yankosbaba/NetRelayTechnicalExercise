@@ -1,31 +1,42 @@
-# Use the latest 2.1 version of CircleCI pipeline process engine.
-# See: https://circleci.com/docs/2.0/configuration-reference
 version: 2.1
 
-# Define a job to be invoked later in a workflow.
-# See: https://circleci.com/docs/2.0/configuration-reference/#jobs
+orbs:
+  win: circleci/windows@2.4.0
+
+workflows:
+  hello-world:
+    jobs:
+      - build
+  integration-tests:
+    jobs:
+      - api-tests
 jobs:
   build:
-    # Specify the execution environment. You can specify an image from Dockerhub or use one of our Convenience Images from CircleCI's Developer Hub.
-    # See: https://circleci.com/docs/2.0/configuration-reference/#docker-machine-macos-windows-executor
-    docker:
-      - image: jetcipher/circleci-dotnet-core:3.0
-    # Add steps to the job
-    # See: https://circleci.com/docs/2.0/configuration-reference/#steps
+    executor:
+      name: win/default
+    working_directory: C:\Users\circleci\project\NetRelayTechnical
+    steps:
+      - checkout:
+          path: C:\Users\circleci\project
+      - restore_cache:
+          keys:
+            - dotnet-packages-v1-{{ checksum "NetRelayTechnical.csproj" }}
+      - run:
+          name: "Install project dependencies"
+          command: dotnet.exe restore
+      - save_cache:
+          paths:
+            - C:\Users\circleci\project\NetRelayTechnical\.nuget\packages
+          key: dotnet-packages-v1-{{ checksum "NetRelayTechnical.csproj" }}
+      - run:
+          name: "Run Build step"
+          command: dotnet.exe publish -c Release -r win10-x64
+  api-tests:
+    executor:
+      name: win/default
     steps:
       - checkout
       - run:
-          name: "Restore"
-          command: dotnet restore
-      - run:
-          name: "Build" 
-          command: dotnet build -c release
-          working_directory: NetRelayTechnical
-      - run:
-          name: Running Tests
+          name: Run api tests
           command: dotnet test
-
-
-# Invoke jobs via workflows
-# See: https://circleci.com/docs/2.0/configuration-reference/#workflows
-
+  
