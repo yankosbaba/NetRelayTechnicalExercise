@@ -31,8 +31,7 @@ jobs:
               # export PATH="$PATH:/root/.dotnet/tools"
               trx2junit NetRelayTechnical\TestResults\*.trx
       - store_test_results:
-          #path: tests/TestResults
-         path: NetRelayTechnical
+          path: TestResults
          
          
   
